@@ -34,11 +34,8 @@ RUN	apt-get update; \
 	cd /usr/local/apache2 ; \
 	bin/apachectl -k start
 	
-	COPY apachectl /usr/local/bin/
 EXPOSE 80
 
-
-CMD ["/usr/local/bin/apache2/bin/apachectl -k start"]
 	
 	
 	
