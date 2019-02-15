@@ -1,6 +1,6 @@
 
 FROM debian:stretch-slim
-MAINTAINER rasoul Behravesh (rbehravesh@fbk.eu)
+MAINTAINER Rasoul Behravesh (rbehravesh@fbk.eu)
 
 RUN	apt-get update; \
 	apt-get install -y --no-install-recommends wget; \
