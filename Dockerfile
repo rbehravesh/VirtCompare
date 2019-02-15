@@ -6,19 +6,39 @@
 
 FROM debian:stretch-slim
 
-# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 
-#RUN groupadd -r kurdistan && useradd -r --create-home -g kurdistan rasoul
+RUN	apt-get update; \
+	apt-get install -y --no-install-recommends wget; \
+	wget http://archive.apache.org/dist/httpd/httpd-2.4.23.tar.gz; \
+	gzip -d httpd-2.4.23.tar.gz ;\
+	tar vxf httpd-2.4.23.tar ;\
+	wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.41.tar.gz; \
+	gzip -d pcre-8.41.tar.gz ; \
+	tar xvf pcre-8.41.tar ; \
+	apt-get install -y --no-install-recommends \
+			gcc \ 
+			g++ \
+			make \
+			libapr1-dev \
+			libaprutil1-dev \
+	; \
+	cd .. ; \
+	cd pcre-8.41 ; \ 
+	./configure --prefix=/usr/local/pcre ; \
+	make ; \
+	make install ; \
+	cd ../httpd-2.4.23 ; \
+	./configure --with-pcre=/usr/local/pcre ; \
+	make ; \
+	make install ; \
+	cd /usr/local/apache2 ; \
+	bin/apachectl -k start
+	
+	COPY apachectl /usr/local/bin/
+EXPOSE 80
 
-ENV HTTPD_PREFIX /usr/local/apache2
-ENV PATH $HTTPD_PREFIX/bin:$PATH
 
-RUN mkdir -p "$HTTPD_PREFIX" \
-	&& chown raosul:kurdistan "$HTTPD_PREFIX"
-  
-WORKDIR $HTTPD_PREFIX
-
-# install httpd runtime dependencies
-# https://httpd.apache.org/docs/2.4/install.html#requirements
-
-
+CMD ["/usr/local/bin/apache2/bin/apachectl -k start"]
+	
+	
+	
