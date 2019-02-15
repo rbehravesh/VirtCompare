@@ -1,8 +1,3 @@
-#Docker file for Apache2 HTTP server
-#The code is driven from the original Docker Hhub repository for Apache2 with some changes to the apache version, useres, and requirements
-# Github Link: https://github.com/docker-library/httpd/blob/f6cb814440756f97821895731765d306528a3429/2.4/Dockerfile
-# Dockerhub Link: https://hub.docker.com/_/httpd
-
 
 FROM debian:stretch-slim
 
