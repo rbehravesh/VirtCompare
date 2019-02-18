@@ -1,8 +1,14 @@
+#Docker file for Apache2 HTTP server
+#The code is driven from the original Docker Hhub repository for Apache2 with some changes to the apache version, useres, and requirements
+# Github Link: https://github.com/docker-library/httpd/blob/f6cb814440756f97821895731765d306528a3429/2.4/Dockerfile
+# Dockerhub Link: https://hub.docker.com/_/httpd
+
 
 FROM debian:stretch-slim
-MAINTAINER Rasoul Behravesh (rbehravesh@fbk.eu)
 
-RUN	apt-get update; \
+
+RUN	bin/bash ;\
+	apt-get update; \
 	apt-get install -y --no-install-recommends wget; \
 	wget http://archive.apache.org/dist/httpd/httpd-2.4.23.tar.gz; \
 	gzip -d httpd-2.4.23.tar.gz ;\
@@ -17,7 +23,6 @@ RUN	apt-get update; \
 			libapr1-dev \
 			libaprutil1-dev \
 	; \
-	cd .. ; \
 	cd pcre-8.41 ; \ 
 	./configure --prefix=/usr/local/pcre ; \
 	make ; \
@@ -26,11 +31,19 @@ RUN	apt-get update; \
 	./configure --with-pcre=/usr/local/pcre ; \
 	make ; \
 	make install ; \
-	cd /usr/local/apache2 ; \
-	bin/apachectl -k start
-	
-EXPOSE 80
+	cd .. ;\
+	rm -rf httpd-2.4.23.tar httpd-2.4.23 pcre-8.41.tar pcre-8.41 
+RUN set -eux; \
+	apt-get remove -y gcc\
+			  g++ \
+			  make\
+			  libapr1-dev \
+			  libaprutil1-dev \
+			  wget
+RUN set -eux; \
+apt-get autoremove -y
+	#cd /usr/local/apache2 ; \
+	#bin/apachectl -k start
+#EXPOSE 80
 
-	
-	
-	
+#CMD ["/usr/local/bin/apache2/bin/apachectl -k start"]
